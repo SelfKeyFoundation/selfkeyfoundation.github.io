@@ -50,9 +50,11 @@
 <h2><a class="anchor" aria-hidden="true" id="1-get-auth-challenge"></a><a href="#1-get-auth-challenge" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. <code>GET /auth/challenge</code></h2>
 <h3><a class="anchor" aria-hidden="true" id="example"></a><a href="#example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h3>
 <pre><code class="hljs css language-javascript">
-router.get(<span class="hljs-string">'/api/v1/selfkey/auth/challenge'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
-  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> generateToken()
-  res.status(<span class="hljs-number">200</span>).json({<span class="hljs-attr">jwt</span>: token})
+<span class="hljs-comment">// Define the following route and call the challenge JWT function from the selfkey library</span>
+
+router.get(<span class="hljs-string">'/selfkey/v2/auth/challenge/:publicKey'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">let</span> authResult = <span class="hljs-keyword">await</span> selfkey.challengeJWT(req.params.publicKey)
+  <span class="hljs-keyword">return</span> res.status(authResult.status).json(authResult)
 })
 
 </code></pre>
@@ -60,13 +62,14 @@ router.get(<span class="hljs-string">'/api/v1/selfkey/auth/challenge'</span>, <s
 <h2><a class="anchor" aria-hidden="true" id="2-post-auth-challenge"></a><a href="#2-post-auth-challenge" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. <code>POST /auth/challenge</code></h2>
 <h3><a class="anchor" aria-hidden="true" id="example-1"></a><a href="#example-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h3>
 <pre><code class="hljs css language-javascript">
-router.post(<span class="hljs-string">'/api/v1/selfkey/auth/challenge'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
-  <span class="hljs-keyword">let</span> signature = req.body.signature
-  <span class="hljs-keyword">let</span> valid = <span class="hljs-keyword">await</span> verifySignature(signature)
-  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> generateToken()
-  (valid) 
-    ? res.status(<span class="hljs-number">201</span>).json({<span class="hljs-attr">jwt</span>: token}) 
-    : res.status(<span class="hljs-number">400</span>).json({<span class="hljs-attr">message</span>: <span class="hljs-string">'Invalid Signature'</span>})
+<span class="hljs-comment">// Split up the challenge JWT elements and call the challenge response function from the selfkey library</span>
+
+router.post(<span class="hljs-string">'/selfkey/v2/auth/challenge'</span>, selfkey.jwtAuthMiddleware, <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">let</span> challenge = req.decodedAuth.challenge
+  <span class="hljs-keyword">let</span> publicKey = req.decodedAuth.sub
+  <span class="hljs-keyword">let</span> { signature } = req.body || {}
+  <span class="hljs-keyword">let</span> authResult = <span class="hljs-keyword">await</span> selfkey.handleChallengeResponse(challenge, signature, publicKey)
+  <span class="hljs-keyword">return</span> res.status(authResult.status).json(authResult)
 })
 
 </code></pre>
@@ -74,35 +77,115 @@ router.post(<span class="hljs-string">'/api/v1/selfkey/auth/challenge'</span>, <
 <h2><a class="anchor" aria-hidden="true" id="3-post-users"></a><a href="#3-post-users" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3. <code>POST /users</code></h2>
 <h3><a class="anchor" aria-hidden="true" id="example-2"></a><a href="#example-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h3>
 <pre><code class="hljs css language-javascript">
-router.post(<span class="hljs-string">'/api/v1/selfkey/auth/challenge'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
-  <span class="hljs-keyword">let</span> signature = req.body.signature
-  <span class="hljs-keyword">let</span> valid = verifySignature(signature)
-  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> generateToken()
-  <span class="hljs-keyword">if</span> (valid) { 
-    res.status(<span class="hljs-number">201</span>).json({<span class="hljs-attr">jwt</span>: token}) 
-  } <span class="hljs-keyword">else</span> { 
-    res.status(<span class="hljs-number">400</span>).json({<span class="hljs-attr">message</span>: <span class="hljs-string">'Invalid Signature'</span>}) 
+<span class="hljs-comment">// Call the middleware functions from the selfkey library and add a create user function</span>
+
+router.post(<span class="hljs-string">'/selfkey/v2/users'</span>, selfkey.jwtAuthMiddleware, selfkey.serviceAuthMiddleware, upload.any(), createUser)
+
+<span class="hljs-keyword">const</span> createUser = <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">let</span> publicKey = req.decodedAuth.sub
+  <span class="hljs-keyword">let</span> attributes = req.body.attributes
+  
+  <span class="hljs-keyword">try</span> {
+    attributes = <span class="hljs-built_in">JSON</span>.parse(attributes)
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">400</span>).json({ <span class="hljs-attr">code</span>: <span class="hljs-string">'invalid_attributes'</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">'Attributes field must be a json string'</span> })
   }
-})
+  <span class="hljs-keyword">if</span> (!attributes || !attributes.length) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">400</span>).json({ <span class="hljs-attr">code</span>: <span class="hljs-string">'no_attributes'</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">'No attributes provided'</span> })
+  }
+  
+  <span class="hljs-comment">// Express specific Multer handling</span>
+  <span class="hljs-keyword">let</span> documents = req.files.map(<span class="hljs-function"><span class="hljs-params">f</span> =&gt;</span> {
+    <span class="hljs-keyword">let</span> id = f.fieldname.match(<span class="hljs-regexp">/^\$document-([0-9]*)$/</span>) || <span class="hljs-built_in">Math</span>.Random(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>).toString()
+    <span class="hljs-keyword">let</span> doc = {
+      <span class="hljs-attr">mimeType</span>: f.mimetype,
+      <span class="hljs-attr">size</span>: f.size,
+      <span class="hljs-attr">content</span>: f.buffer,
+      <span class="hljs-attr">link</span>: path.join(__dirname, <span class="hljs-string">'../'</span>, <span class="hljs-string">'/public/uploads/'</span>, publicKey, <span class="hljs-string">'/'</span>, id),
+      <span class="hljs-attr">id</span>: id
+    }
+    <span class="hljs-keyword">return</span> doc
+  })
+
+  <span class="hljs-comment">// Add docs to DB</span>
+  documents = documents.map(<span class="hljs-function"><span class="hljs-params">doc</span> =&gt;</span> {
+    <span class="hljs-keyword">let</span> newDoc = Document.create(doc)
+    <span class="hljs-keyword">return</span> doc
+  })
+
+  attributes = attributes.map(<span class="hljs-function"><span class="hljs-params">attr</span> =&gt;</span> {
+    <span class="hljs-keyword">let</span> attrDocs = attr.documents
+      .map(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span> {
+        <span class="hljs-keyword">let</span> found = documents.filter(<span class="hljs-function"><span class="hljs-params">doc</span> =&gt;</span> doc.id === id)
+        <span class="hljs-keyword">return</span> found.length ? found[<span class="hljs-number">0</span>] : <span class="hljs-literal">null</span>
+      })
+      .filter(<span class="hljs-function"><span class="hljs-params">doc</span> =&gt;</span> !!doc)
+    attr = { ...attr, <span class="hljs-attr">documents</span>: attrDocs }
+    <span class="hljs-keyword">let</span> { value } = selfkey.denormalizeDocumentsSchema(attr.schema, attr.data, attrDocs)
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">id</span>: attr.id, value }
+  })
+
+  <span class="hljs-keyword">let</span> user = <span class="hljs-keyword">await</span> User.findOne({<span class="hljs-attr">selfkey_wallet</span>: publicKey})
+  
+  <span class="hljs-keyword">let</span> realToken = <span class="hljs-keyword">await</span> generateToken() <span class="hljs-comment">// integrator specific token used for URL auth</span>
+  
+  <span class="hljs-keyword">if</span> (user) {
+    user = <span class="hljs-keyword">await</span> User.update({<span class="hljs-attr">selfkey_wallet</span>: publicKey}, { <span class="hljs-attr">token</span>: realToken, <span class="hljs-attr">attributes</span>: attributes })
+  } <span class="hljs-keyword">else</span> {
+    user = <span class="hljs-keyword">await</span> User.create({<span class="hljs-attr">selfkey_wallet</span>: publicKey, <span class="hljs-attr">token</span>: realToken, <span class="hljs-attr">attributes</span>: attributes})
+  }
+  <span class="hljs-keyword">if</span> (!user) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">400</span>).json({ <span class="hljs-attr">code</span>: <span class="hljs-string">'could_not_create'</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">'Could not create user'</span> })
+  }
+  <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">201</span>).json({ <span class="hljs-attr">user</span>: user, <span class="hljs-attr">token</span>: realToken})
+}
 
 </code></pre>
 <hr>
 <h2><a class="anchor" aria-hidden="true" id="4-get-auth-token"></a><a href="#4-get-auth-token" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>4. <code>GET /auth/token</code></h2>
 <h3><a class="anchor" aria-hidden="true" id="example-3"></a><a href="#example-3" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h3>
 <pre><code class="hljs css language-javascript">
-router.get(<span class="hljs-string">'/api/v1/selfkey/auth/token'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
-  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> generateToken()
-  res.status(<span class="hljs-number">200</span>).json({<span class="hljs-attr">user</span>: token})
-})
+<span class="hljs-comment">// Call the selfkey middleware functions and add handler for user payload</span>
+
+router.get(<span class="hljs-string">'/selfkey/v2/auth/token'</span>, selfkey.jwtAuthMiddleware, selfkey.serviceAuthMiddleware, getUserPayload)
+
+<span class="hljs-keyword">const</span> getUserPayload = <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">let</span> publicKey = req.decodedAuth.sub
+  <span class="hljs-keyword">let</span> user = <span class="hljs-keyword">await</span> User.findOne({<span class="hljs-attr">selfkey_wallet</span>: publicKey})
+  <span class="hljs-keyword">if</span> (!user) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">404</span>).json({ <span class="hljs-attr">code</span>: <span class="hljs-string">'user_does_not_exist'</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">'User with provided public key does not exist'</span> })
+  }
+  <span class="hljs-keyword">let</span> userToken = selfkey.userJWT({ <span class="hljs-attr">subject</span>: <span class="hljs-string">''</span> + user.selfkey_wallet })
+  <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">200</span>).json({ <span class="hljs-attr">token</span>: userToken })
+}
 
 </code></pre>
 <hr>
 <h2><a class="anchor" aria-hidden="true" id="5-post-login"></a><a href="#5-post-login" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>5. <code>POST /login</code></h2>
 <h3><a class="anchor" aria-hidden="true" id="example-4"></a><a href="#example-4" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h3>
 <pre><code class="hljs css language-javascript">
-router.post(<span class="hljs-string">'/api/v1/selfkey/login'</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
-  res.status(<span class="hljs-number">201</span>).json({<span class="hljs-attr">redirectUrl</span>: <span class="hljs-string">'/success'</span>})
-})
+<span class="hljs-comment">// Add the following route and a login handler, use the selfkey library to verify the token</span>
+
+router.options(<span class="hljs-string">'/selfkey/v2/login'</span>, cors())
+
+router.post(<span class="hljs-string">'/selfkey/v2/login'</span>, cors(), login)
+
+<span class="hljs-keyword">const</span> login = <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">const</span> { body } = req
+  <span class="hljs-keyword">if</span> (!body.token) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">400</span>).json({ <span class="hljs-attr">redirectTo</span>: <span class="hljs-string">'/login'</span> })
+  } 
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">let</span> decoded = selfkey.verifyJWT(body.token)
+    <span class="hljs-keyword">let</span> user = <span class="hljs-keyword">await</span> User.findOne({<span class="hljs-attr">selfkey_wallet</span>: decoded.sub})
+    <span class="hljs-keyword">if</span> (!user) {
+      <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">404</span>).json({ <span class="hljs-attr">redirectTo</span>: <span class="hljs-string">'/login'</span> })
+    }
+    <span class="hljs-keyword">return</span> res.json({ <span class="hljs-attr">redirectTo</span>: <span class="hljs-string">'/success/'</span> + user.token })
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">401</span>).json({ <span class="hljs-attr">redirectTo</span>: <span class="hljs-string">`/login`</span> })
+  }
+}
 
 </code></pre>
 <hr>
